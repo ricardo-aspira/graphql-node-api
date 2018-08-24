@@ -1,8 +1,11 @@
+// Adicionada lib "esnext" para remover erro de compilação do AsyncIterator e AsyncIterable
 {
     "compilerOptions": {
+        "lib": [
+            "esnext"
+        ],
         "target": "es6",
-        "module": "commonjs",
-        "outDir": "dist"
+        "module": "commonjs"
     },
     "compileOnSave": false,
     "include": [
