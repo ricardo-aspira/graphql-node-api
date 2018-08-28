@@ -12,6 +12,7 @@
         "src/**/*.ts"
     ],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "node_modules/@types/bluebird/index.d.ts"
     ]
 }

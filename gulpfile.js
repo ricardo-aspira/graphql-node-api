@@ -1,6 +1,7 @@
 // Código estilo Node.JS, não ES6
 const gulp  = require('gulp');
 const clean = require('gulp-clean');
+const debug = require('gulp-debug');
 const ts    = require('gulp-typescript');
 
 // Cria a definição do projeto com base no arquivo de configurações do typescript
@@ -13,6 +14,7 @@ const tsProject = ts.createProject('tsconfig.json');
 gulp.task('scripts', ['static'], () => {
     // Sobre o src, realiza o build
     const tsResult = tsProject.src()
+        .pipe(debug())
         .pipe(tsProject());
 
     // Sobre o resultado do build, copiar o mesmo para o destino desejado
