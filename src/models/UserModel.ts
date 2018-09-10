@@ -1,3 +1,9 @@
+import * as Sequelize from 'sequelize';
+
+import { BaseModelInterface } from '../interfaces/BaseModelInterface';
+importimport { DefaultValuesOfCorrectType } from 'graphql/validation/rules/DefaultValuesOfCorrectType';
+ default from '../graphql/schema';
+
 /**
  * Define os campos que teremos na nossa tabela no banco de dados,
  * podendo utilizá-los quando tivermos uma instância deste registro.
@@ -26,7 +32,76 @@ export interface UserAttributes {
  * 
  * Também é possível inserir novos registros através de uma nova 
  * instância do model. Consultar a documentação.
+ * 
+ * A 1a herança é para que possamos usar os métodos de instância do
+ * nosso registro (save, update etc). Passar o UserAttributes serve
+ * para que se saiba quais atributos estão disponíveis.
+ * 
+ * A 2a herança é para que possamos acessar diretamente da instância,
+ * os atributos em si.
  */
-export interface UserInstance {
+export interface UserInstance extends Sequelize.Instance<UserAttributes>, UserAttributes {
 
+    /**
+     * Método para verificar se o password informado está de acordo com
+     * o password que temos guardado para o usuário.
+     */
+    isPassword(encodedPassword: string, password: string): boolean;
+
+}
+
+/**
+ * Esta interface serve para trabalharmos com os métodos do model em si.
+ * Poderemos utilizar o nosso UserModel para fazer queries, cadastrar 
+ * um novo usuário, associação entre tabelas etc.
+ * 
+ * Ao herdar do Model do Sequelize, precisamos dizer qual a instância e
+ * seus atributos.
+ */
+export interface UserModel extends BaseModelInterface, Sequelize.Model<UserInstance, UserAttributes> {}
+
+/**
+ * Precisamos agora exportar uma instância definida desse model.
+ * Exportaremos uma função que será chamada pelo import do Sequelize
+ * para ele definir este método, criar a tabela no banco de dados etc.
+ */
+export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes): UserModel => {
+
+    /**
+     * 1o param - Nome do model
+     * 2o param - atributos que queremos configurar e a fim de serem inseridos 
+     * na tabela no banco de dados.
+     */
+    const User: UserModel = 
+        sequelize.define('User', {
+            id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            name: {
+                type: DataTypes.STRING(128),
+                allowNull: false
+            },
+            email: {
+                type: DataTypes.STRING(128),
+                allowNull: false,
+                unique: true
+            },
+            password: {
+                type: DataTypes.STRING(128),
+                allowNull: false,
+                validate: {
+                    notEmpty: true
+                }
+            },
+            photo: {
+                type: DataTypes.BLOB({
+                    length: 'long'
+                }),
+                allowNull: true,
+                defaultValue: null
+            }
+        });
 }
