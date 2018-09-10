@@ -2,7 +2,7 @@ import { ModelsInterface } from "./ModelsInterface";
 
 /**
  * Interface para servir de base para cada um dos models da aplicação.
- * Server para criar métodos de classe ou métodos de instância no nosso model sequelize.
+ * Serve para criar métodos de classe ou métodos de instância no nosso model sequelize.
  * 
  * Método de classe não depende da instância do model (static).
  * Método de instância trabalha com a instância do model.
