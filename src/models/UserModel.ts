@@ -3,6 +3,7 @@ import * as Sequelize from 'sequelize';
 import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
 
 import { BaseModelInterface } from '../interfaces/BaseModelInterface';
+import { ModelsInterface } from '../interfaces/ModelsInterface';
 
 /**
  * Define os campos que teremos na nossa tabela no banco de dados,
@@ -18,6 +19,8 @@ export interface UserAttributes {
     email?: string;
     password?: string;
     photo?: string;
+    createdAt?: string;
+    updatedAt?: string;
 
 }
 
@@ -121,6 +124,8 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
                 }
             }
         });
+
+    //User.associate = (models: ModelsInterface): void => {}
 
     User.prototype.isPassword = (encodedPassword: string, password: string): boolean => {
         return compareSync(password, encodedPassword);
