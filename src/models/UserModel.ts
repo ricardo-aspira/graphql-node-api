@@ -1,8 +1,8 @@
 import * as Sequelize from 'sequelize';
 
+import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
+
 import { BaseModelInterface } from '../interfaces/BaseModelInterface';
-importimport { DefaultValuesOfCorrectType } from 'graphql/validation/rules/DefaultValuesOfCorrectType';
- default from '../graphql/schema';
 
 /**
  * Define os campos que teremos na nossa tabela no banco de dados,
@@ -68,9 +68,11 @@ export interface UserModel extends BaseModelInterface, Sequelize.Model<UserInsta
 export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes): UserModel => {
 
     /**
-     * 1o param - Nome do model
+     * 1o param - nome do model
      * 2o param - atributos que queremos configurar e a fim de serem inseridos 
      * na tabela no banco de dados.
+     * 3o param - opções de definição do model (nome da tabela, hooks etc)
+     *            hooks são conhecidos como life cycle events
      */
     const User: UserModel = 
         sequelize.define('User', {
@@ -103,5 +105,27 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
                 allowNull: true,
                 defaultValue: null
             }
+        }, {
+            tableName: 'users',
+            hooks: {
+                /**
+                 * 1o param - instância do registro que está sendo criado
+                 * 2o param - options que não usaremos mas estamos deixando
+                 *            explícita sua existência
+                 * 
+                 * Vamos com este hook criptografar a senha do usuário.
+                 */
+                beforeCreate: (user: UserInstance, options: Sequelize.CreateOptions): void => {
+                    const salt = genSaltSync();
+                    user.password = hashSync(user.password, salt);
+                }
+            }
         });
+
+    User.prototype.isPassword = (encodedPassword: string, password: string): boolean => {
+        return compareSync(password, encodedPassword);
+    }
+
+    return User;
+
 }
