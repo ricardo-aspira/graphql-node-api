@@ -10,7 +10,7 @@ import { ModelsInterface } from "./ModelsInterface";
 export interface BaseModelInterface {
 
     /**
-     * Atributo opcional para criarmos métodos de instância no nosso modelo.
+     * Atributo opcional para criarmos métodos de instância nos nossos models.
      */
     prototype?;
 
