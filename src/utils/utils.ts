@@ -1,5 +1,4 @@
 import { Server } from "http";
-import { AddressInfo } from "net";
 
 export const normalizePort = (val: number | string): number | string | boolean => {
     let port: number = (typeof val === 'string') ? parseInt(val) : val;
@@ -10,14 +9,9 @@ export const normalizePort = (val: number | string): number | string | boolean =
 
 export const onError = (server: Server) => {
     return (error: NodeJS.ErrnoException): void => {
-<<<<<<< HEAD
         let address = server.address();
-        //let port: number | string = (<AddressInfo>server.address()).port;
         let port: number | string = (typeof address === 'string') ? address : address.port;
         
-=======
-        let port: number | string = (<AddressInfo>server.address()).port;
->>>>>>> e015d1a6fd2874e3487ae649564b9236be120521
         if (error.syscall !== 'listen') throw error;
         let bind = (typeof port === 'string') ? `pipe ${port}` : `port ${port}`;
         switch (error.code) {

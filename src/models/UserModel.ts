@@ -67,6 +67,11 @@ export interface UserModel extends BaseModelInterface, Sequelize.Model<UserInsta
  * Precisamos agora exportar uma instância definida desse model.
  * Exportaremos uma função que será chamada pelo import do Sequelize
  * para ele definir este método, criar a tabela no banco de dados etc.
+ * 
+ * sequelize - representa a instância do sequelize aberta com o BD
+ * DataTypes - tipos de dados que podemos usar para definir os campos
+ *             da nossa tabela
+ * return UserModel
  */
 export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes): UserModel => {
 
@@ -112,6 +117,8 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
             tableName: 'users',
             hooks: {
                 /**
+                 * Também são chamados de lifecycle events.
+                 * 
                  * 1o param - instância do registro que está sendo criado
                  * 2o param - options que não usaremos mas estamos deixando
                  *            explícita sua existência
@@ -125,7 +132,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
             }
         });
 
-    //User.associate = (models: ModelsInterface): void => {}
+    //User.associate = (models: ModelsInterface): void => {};
 
     User.prototype.isPassword = (encodedPassword: string, password: string): boolean => {
         return compareSync(password, encodedPassword);
@@ -133,4 +140,4 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
 
     return User;
 
-}
+};

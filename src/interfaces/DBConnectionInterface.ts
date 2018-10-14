@@ -1,6 +1,5 @@
 import * as Sequelize from 'sequelize';
-
-import { ModelsInterface } from './ModelsInterface';
+import { ModelsInterface } from "./ModelsInterface";
 
 /**
  * Esta interface representa a nossa conexão com o banco de dados,
